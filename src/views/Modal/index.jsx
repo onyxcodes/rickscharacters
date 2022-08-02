@@ -31,11 +31,15 @@ class Modal extends Component {
                     {/* TODO: Add loader while fetching additional details */}
                     <div className="modal-content">
                         <div 
-                            className="modal-content-hero"
-                            style={{
-                                backgroundImage: data?.image ? "url("+data?.image+")" : ""
-                            }}
-                        >&nbsp;</div>
+                            className="hero-container"
+                        >   <div className="hero"
+                                style={{
+                                    backgroundImage: data?.image ? "url("+data?.image+")" : ""
+                                }}
+                            >
+                            &nbsp;
+                            </div>
+                        </div>
                         <div className="modal-content-details">
                             <ul>
                                 <li>Some detail</li>

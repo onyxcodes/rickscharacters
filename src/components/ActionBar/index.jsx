@@ -5,9 +5,15 @@ import React, { Component } from "react"
 class ActionBar extends Component {
 
     render() {
+        const { position, items, bgColor } = this.props;
         var barClasses = this.props.position ? "actionbar-container".concat(" "+this.props.position) : "actionbar-container";
         return (
-            <div className={barClasses}>
+            <div 
+                className={barClasses}
+                style={{
+                    backgroundColor: bgColor
+                }}
+            >
                 <div className="actionbar-left">
                     {this.props.items?.map((i, index) => {
                         if (i.position == "left" && i.item) return (<div key={index} className="actionbar-item">{i?.item}</div>)

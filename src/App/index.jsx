@@ -64,11 +64,15 @@ class App extends Component {
     render() {
         return (
             <div id="app">
-                <ActionBar position="top" items={[
-                    { item: <SearchBar ctrlLoading={(loadingState) => this.ctrlLoading(loadingState)} />, position: "left" },
-                    { item: <span>Rick's Characters</span>, position: "center" },
-                    { item: <button>Favs</button>, position: "right" }
-                ]} />
+                <ActionBar 
+                    position="top"
+                    bgColor="teal"
+                    items={[
+                        { item: <SearchBar ctrlLoading={(loadingState) => this.ctrlLoading(loadingState)} />, position: "left" },
+                        { item: <span>Rick's Characters</span>, position: "center" },
+                        { item: <button>Favs</button>, position: "right" }
+                    ]} 
+                />
                 <Loader show={this.state.isLoading} />
                 <ListView 
                     paginated={false}
