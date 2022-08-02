@@ -5,22 +5,18 @@ class Card extends Component {
         // TOCO
     }
     render() {
-        var cardClasses = this.props.size ? "card".concat(" "+this.props.size) : "card";
-        var data = {
-            current: this.props.title,
-            next: this.props.next,
-            previous: this.props.previous
-        }
+        const { data, size, openDetails } = this.props;
+        var cardClasses = size ? "card".concat(" "+size) : "card";
         return(
             <div 
                 className={cardClasses}
-                onClick={() => this.props.openDetails(data)}
+                onClick={() => openDetails(data)}
             >
                 <div className="card-hero" style={{
                     backgroundColor: this.props.color || "#999999",
-                    // backgroundImage: this.props.image 
+                    backgroundImage: data?.image ? "url("+data?.image+")" : null
                 }}></div>
-                <span className="card-title">{this.props.title}</span>
+                <span className="card-title">{data.name}</span>
             </div>
         )
     }

@@ -1,17 +1,16 @@
 import axios from "axios";
 
-const list = ( offset, limit ) => {
+const list = ( page ) => {
     return new Promise ( (resolve, reject) => {
         axios({
             "method": "GET",
-            "url": "https://pokeapi.co/api/v2/pokemon",
+            "url": "https://rickandmortyapi.com/api/character",
             "headers": {
                 "crossorigin":true,
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Headers": "*"
             }, "params": {
-                "offset":offset,
-                "limit":  limit
+                "page": page,
             }
         })
         .then(({data}) => {
@@ -23,7 +22,16 @@ const list = ( offset, limit ) => {
     });
 }
 
-export const listPokemon = (offset = 0, limit = 24) => dispatch => {
+const getPageFromURI = (uri) => {
+    if ( uri ) {
+        var url = new URL(uri)
+        var urlParams = new URLSearchParams(url.search);
+        var page = urlParams.get('page');
+        return page;
+    } else return null;
+}
+
+export const listCharacters = ( page = 1) => dispatch => {
     // The first dispatch is to mark that we are going to make an async call
     // when it responds, we are going to mark the call as completed
     dispatch({
@@ -32,21 +40,16 @@ export const listPokemon = (offset = 0, limit = 24) => dispatch => {
             loading: true
         }
     });
-    list(offset, limit).then( res => {
+    list(page).then( res => {
         if (res) {
+            console.log("list - got res", res);
             dispatch({
                 type: "LIST",
                 payload: {
-                    count: res.count,
+                    // count: res.count,
                     results: res.results,
-                    next: res.next ? {
-                        offset: (offset || 0) + limit,
-                        limit: limit
-                    } : null,
-                    previous: res.previous ? {
-                        offset: (offset || 0) - limit,
-                        limit: limit
-                    } : null
+                    next: getPageFromURI(res.info?.next),
+                    previous: getPageFromURI(res.info?.prev),
                 }
             })
         }

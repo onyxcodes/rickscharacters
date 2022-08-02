@@ -101,7 +101,7 @@ code {
 
 .card.medium {
   width: 250px;
-height: 450px;
+height: 400px;
 }
 
 .card-title {
@@ -116,6 +116,9 @@ height: 450px;
   border-radius: 0 0 10px 10px;
   margin: -1%;
   flex: 1;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 .modal-fg {

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import {bindActionCreators} from 'redux';
-import { listPokemon } from "../../features/pokeapi/list";
+import { listCharacters } from "../../features/rickandmortyapi/list";
 
 import Loader from "../../components/Loader";
 import Card from "../../components/Card";
@@ -17,23 +17,21 @@ class ListView extends Component {
 
     componentDidMount() {
         // at first load data
-        this.props.listPokemon();
+        this.props.listCharacters();
     }
 
     fetchNext() {
         if ( this.props.list && this.props.list?.next ) {
-            this.props.listPokemon(
-                this.props.list.next.offset,
-                this.props.list.next.limit
+            this.props.listCharacters(
+                this.props.list.next
             )
         } // else throw Error
     }
 
     fetchPrevious() {
         if ( this.props.list && this.props.list?.previous ) {
-            this.props.listPokemon(
-                this.props.list.previous.offset,
-                this.props.list.previous.limit
+            this.props.listCharacters(
+                this.props.list.previous
             )
         } // else throw Error
     }
@@ -44,14 +42,10 @@ class ListView extends Component {
             <div className="listView">
                 <Loader show={isLoading} />
                 {list?.results?.map( (i, index) => {
-                    // TODO: consider saving results in current page into an array
-                    // therefore it can be used to fetch next and previous from modals
-                    // obviously dont compute it here..
-                    return <Card key={i.name}
+                    console.log("ListView.Card - Got i", i);
+                    return <Card key={i.id}
                         openDetails={(data) => openDetails(data)}
-                        next={ list.results?.[index+1]?.name }
-                        previous={ list.results?.[index-1]?.name }
-                        title={i.name}
+                        data={i}
                         size={this.props.size}
                     />
                 })}
@@ -69,7 +63,8 @@ class ListView extends Component {
 
 function mapStateToProps({list}) {
     let isLoading = true; // this when the compoenent is first mounted
-    if (list && list?.count) {
+    if (list && list.results?.length) {
+        console.log("ListView - list", list)
         isLoading = false; 
         return { list, isLoading }
     }
@@ -77,7 +72,7 @@ function mapStateToProps({list}) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({listPokemon}, dispatch);
+    return bindActionCreators({listCharacters}, dispatch);
 }
   
 export default connect(mapStateToProps, mapDispatchToProps)(ListView);

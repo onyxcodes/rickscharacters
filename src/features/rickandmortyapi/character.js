@@ -1,15 +1,13 @@
 import axios from "axios";
 
-const pokemon = (id, name) => {
+const character = (id) => {
     let param;
     if (id != null && !isNaN(id)) param = id;
-    else if (name != null) param = name;
     else throw Error("Missing parameter id or name for fetching Pokemon data");
     return new Promise((resolve, reject) => {
         axios({
             "method": "GET",
-            // "url": "/pokeapi/pokemon",
-            "url": "https://pokeapi.co/api/v2/pokemon/" + param,
+            "url": "https://rickandmortyapi.com/api/character/" + param,
             "headers": {
                 "crossorigin": true,
                 "Content-Type": "application/json",
@@ -25,17 +23,17 @@ const pokemon = (id, name) => {
     });
 }
 
-export const getPokemon = (id, name) => dispatch => {
+export const getCharacter = (id) => dispatch => {
     dispatch({
-        type: "POKEMON",
+        type: "CHARACTER",
         payload: {
             loading: true
         }
     });
-    pokemon(id, name).then(res => {
+    character(id, name).then(res => {
         if (res?.id) {
             dispatch({
-                type: "POKEMON",
+                type: "CHARACTER",
                 payload: res
             })
         }
@@ -44,7 +42,7 @@ export const getPokemon = (id, name) => dispatch => {
 
 export default function reducer(state = null, action) {
     switch (action.type) {
-        case "POKEMON": {
+        case "CHARACTER": {
             return action.payload || null
         }
         default:
