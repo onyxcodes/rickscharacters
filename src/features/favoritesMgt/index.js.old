@@ -1,0 +1,47 @@
+const favoritesMgt = {
+    favoritesKey: "favorites",
+    getFavorites: () =>  {
+        let favorites = [];
+        try {
+            if (localStorage.getItem("favorites")) favorites = JSON.parse(localStorage.getItem("favorites"));
+        } catch (e) {
+            console.log("getFavorites - problem while fetching or parsing favorites", e);
+        }
+        return favorites;
+    },
+
+    updateFavorites: ( favorites ) => {
+        debugger;
+        let favoritesStr =  JSON.stringify(favorites)
+        localStorage.setItem(favoritesMgt.favoritesKey, favoritesStr);
+        return true;
+    },
+
+    addToFavorites: ( id ) => {
+        if (id) {
+            let favorites = favoritesMgt.getFavorites();
+            if ( !favorites.includes(id) ) {
+                favorites.push(id);
+                favoritesMgt.updateFavorites(favorites);
+            } else console.log("addToFavorites - attention, favorite with id `"+id+"` already present", favorites);
+            return favorites;
+        } else throw new Error("addToFavorites - missing id parameter");
+    },
+
+    removeFromFavorites: (id) => {
+        if (id) {
+            let favorites = favoritesMgt.getFavorites();
+            let found = false;
+            favorites.filter( element => {
+                found = element === id;
+                return !found;
+            });
+            if ( found ) {
+                favoritesMgt.updateFavorites(favorites);
+            } else console.log("addToFavorites - attention, favorite with id `"+id+"` was not found", favorites);
+            return favorites;
+        } else throw new Error("removeFromFavorites - missing id parameter");
+    }
+}
+
+export default favoritesMgt;

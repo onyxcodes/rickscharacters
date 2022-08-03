@@ -41,7 +41,7 @@ class SearchBar extends Component {
                 <input type="text" 
                     onChange={ (e) => this.prepareSearch(e)}
                 />
-                <button onClick={ () => this.performSearch()} disabled={this.state.searchBtnDisabled}>Search</button>
+                <button onClick={ () => this.performSearch()} disabled={this.state.searchBtnDisabled}>🔍 Search</button>
             </>
         )
     }

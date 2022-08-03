@@ -1,4 +1,5 @@
 import axios from "axios";
+import {getPageFromURI} from "./index"
 
 const list = ( page ) => {
     return new Promise ( (resolve, reject) => {
@@ -20,15 +21,6 @@ const list = ( page ) => {
             console.log(error)
         })
     });
-}
-
-const getPageFromURI = (uri) => {
-    if ( uri ) {
-        var url = new URL(uri)
-        var urlParams = new URLSearchParams(url.search);
-        var page = urlParams.get('page');
-        return page;
-    } else return null;
 }
 
 export const listCharacters = ( page = 1) => dispatch => {

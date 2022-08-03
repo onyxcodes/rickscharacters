@@ -42,7 +42,6 @@ class ListView extends Component {
             <div className="listView">
                 <Loader show={isLoading} />
                 {list?.results?.map( (i, index) => {
-                    console.log("ListView.Card - Got i", i);
                     return <Card key={i.id}
                         openDetails={(data) => openDetails(data)}
                         data={i}
