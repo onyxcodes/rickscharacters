@@ -7,14 +7,12 @@ import Loader from "../../components/Loader";
 import Card from "../../components/Card";
 import ActionBar from "../../components/ActionBar";
 
-// TODO: component that accept different size configurations
-// and displays a card for each data.entries passed to this
-// support pagination and items per page conf
 class ListView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            searchQuery: null
+            query: null,
+            idFilter: null
         }
     }
 
@@ -24,11 +22,15 @@ class ListView extends Component {
     }
 
     componentDidUpdate() {
-        if (this.props.query !== this.state.searchQuery) this.setState({ searchQuery: this.props.query}, () => {
-            this.props.listCharacters(null, this.state.searchQuery);
+        // When component recieves a search query, stores in state and fetch character with query
+        const { query, idFilter } = this.state;
+        if (this.props.query !== query) this.setState({ query: this.props.query}, () => {
+            this.props.listCharacters(null, query, idFilter);
         });
-        // debugger;
-        // if ( this.props.query !== this.state.searchQuery && this.state.searchQuery ) 
+        debugger;
+        if (this.props.idFilter !== idFilter) this.setState( { idFilter: this.props.idFilter}, () => {
+            this.props.listCharacters(null, query, idFilter);
+        })
     }
 
     fetchNext() {
@@ -48,18 +50,17 @@ class ListView extends Component {
     }
 
     render() {
-        const { list, openDetails, isLoading } = this.props;
+        const { list, openDetails, loading, error } = this.props;
         return(
             <div className="listView">
-                <Loader show={isLoading} />
-                {list?.results?.map( (i, index) => {
+                <Loader show={loading} />
+                { !error ? list?.results?.map( (i, index) => {
                     return <Card key={i.id}
                         openDetails={(data) => openDetails(data)}
                         data={i}
                         size={this.props.size}
                     />
-                })}
-
+                }) : <h5>{error}</h5>}
                 <ActionBar position="bottom"
                     items={[
                         { item: <button onClick={() => this.fetchPrevious()} disabled={!list.previous}>Previous</button>, position: "left"},
@@ -72,13 +73,14 @@ class ListView extends Component {
 }
 
 function mapStateToProps({list}) {
-    let isLoading = true; // this when the compoenent is first mounted
-    if (list && list.results?.length) {
-        console.log("ListView - list", list)
-        isLoading = false; 
-        return { list, isLoading }
+    let loading = true,
+        error = false; // this when the compoenent is first mounted
+    if (list && !list.loading) {
+        loading = list.loading,
+            error = list.error; 
+        return { list, loading, error }
     }
-    return { list: [], isLoading: list?.loading || isLoading }
+    return { list: [], loading: list?.loading || loading, error }
 }
 
 function mapDispatchToProps(dispatch) {

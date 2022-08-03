@@ -2,9 +2,9 @@ import React, { Component } from "react";
 
 import ActionBar from "../components/ActionBar";
 import SearchBar from "../components/SearchBar";
-import Loader from "../components/Loader";
 import ListView from "../views/ListView";
 import Modal from "../views/Modal";
+import Toggle from "../components/Toggle";
 
 import FavoritesMgt from "../features/favoritesMgt";
 
@@ -15,7 +15,9 @@ class App extends Component {
             showModal: false,
             focusedElement: null,
             favoritesMgt: new FavoritesMgt(),
-            searchQuery: null
+            searchQuery: null,
+            favorites: null,
+            favoritesVisible: false
         }
     }
 
@@ -26,6 +28,18 @@ class App extends Component {
         })
     }
 
+    showFavorites( value ) {
+        this.setState({ favoritesVisible: value }, () => {
+            let favorites;
+            if (this.state.favoritesVisible) favorites = this.state.favoritesMgt.getFavorites();
+            debugger;
+            this.setState({ 
+                searchQuery: null,
+                favorites: this.state.favoritesVisible ? favorites : null
+            })
+        })
+    }
+
     closeModal() {
         this.setState({
             showModal: false
@@ -33,18 +47,17 @@ class App extends Component {
     }
 
     setSearchQuery(name) {
-        console.log("App - got search query", name)
-        this.setState({ searchQuery: name})
+        this.setState({ searchQuery: name })
     }
 
     addToFavorites(elementId) {
         let favorites = this.state.favoritesMgt.addToFavorites(elementId);
-        this.setState({ favoritesMgt: new FavoritesMgt(favorites)})
+        this.setState({ favoritesMgt: new FavoritesMgt(favorites) })
     }
 
     removeFromFavorites(elementId) {
         let favorites = this.state.favoritesMgt.removeFromFavorites(elementId);
-        this.setState({ favoritesMgt: new FavoritesMgt(favorites)})
+        this.setState({ favoritesMgt: new FavoritesMgt(favorites) })
     }
 
     render() {
@@ -54,14 +67,18 @@ class App extends Component {
                     position="top"
                     bgColor="teal"
                     items={[
-                        { item: <SearchBar ctrlLoading={(loadingState) => this.ctrlLoading(loadingState)} setSearchQuery={(name)=> this.setSearchQuery(name)} />, position: "left" },
+                        { item: <SearchBar value={this.state.searchQuery} setSearchQuery={(name)=> this.setSearchQuery(name)} />, position: "left" },
                         { item: <span>Rick's Characters</span>, position: "center" },
-                        { item: <button>⭐ Favorites</button>, position: "right" }
+                        { item: <Toggle id="favorites" 
+                            onChange={ (value) => this.showFavorites(value)} 
+                            checked={this.state.favoritesVisible}
+                            label="⭐ Favorites"/>, position: "right"
+                        }
                     ]} 
                 />
-                {/* <Loader show={this.state.isLoading} /> */}
                 <ListView
                     query={this.state.searchQuery}
+                    idFilter={this.state.favorites}
                     paginated={false}
                     size="medium"
                     openDetails={(el) => this.openDetails(el)}
