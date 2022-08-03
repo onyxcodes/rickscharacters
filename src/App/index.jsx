@@ -32,7 +32,6 @@ class App extends Component {
         this.setState({ favoritesVisible: value }, () => {
             let favorites;
             if (this.state.favoritesVisible) favorites = this.state.favoritesMgt.getFavorites();
-            debugger;
             this.setState({ 
                 searchQuery: null,
                 favorites: this.state.favoritesVisible ? favorites : null
@@ -67,7 +66,7 @@ class App extends Component {
                     position="top"
                     bgColor="teal"
                     items={[
-                        { item: <SearchBar value={this.state.searchQuery} setSearchQuery={(name)=> this.setSearchQuery(name)} />, position: "left" },
+                        { item: <SearchBar value={this.state.searchQuery} disabled={this.state.favoritesVisible} setSearchQuery={(name)=> this.setSearchQuery(name)} />, position: "left" },
                         { item: <span>Rick's Characters</span>, position: "center" },
                         { item: <Toggle id="favorites" 
                             onChange={ (value) => this.showFavorites(value)} 

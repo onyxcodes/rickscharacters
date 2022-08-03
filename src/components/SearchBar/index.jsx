@@ -35,7 +35,7 @@ class SearchBar extends Component {
     render() {
         return(
             <>
-                <input type="text" placeholder="Search by name"
+                <input type="text" disabled={this.props.disabled} placeholder="Search by name"
                     onChange={ (e) => this.prepareSearch(e)}
                 />
                 <button onClick={ () => this.performSearch()} disabled={this.state.searchBtnDisabled}>🔍 Search</button>

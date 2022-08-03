@@ -6,10 +6,9 @@ const list = ( page, name, ids ) => {
         let params = {}
         if (name) params.name = name;
         else params.page = page;
-        debugger;
         let url = "https://rickandmortyapi.com/api/character";
-        if ( ids && ids.length ) url.concat(ids.toString(","));
-        else if ( ids ) url.concat("0");
+        if ( ids && ids.length ) url = url.concat("/"+ids.toString(","));
+        else if ( ids ) url.concat("/0");
         axios({
             "method": "GET",
             "url": url,
@@ -22,7 +21,17 @@ const list = ( page, name, ids ) => {
         .then(({data}) => {
             data.loading = false;
             data.error = null;
-            if (data && data?.results?.length) resolve(data)
+            if (data && data?.results?.length) resolve(data);
+            else if ( data && !data.results) {
+                // In case there's only a character in the filter
+                // the response is formatted differently, handle it
+                let newData = {
+                    results: [...data],
+                    loading: false,
+                    error: null
+                }
+                resolve(newData);
+            }
         })
         .catch((error) => {
             error.response.status !== 404 ? console.log(error) : null;
@@ -44,11 +53,10 @@ export const listCharacters = ( page = 1 , name = null, ids = null ) => dispatch
             loading: true
         }
     });
-    debugger;
-    // TODO: start a timeout
+    // TODO1: Consider adding a timeout
     list(page, name, ids).then( res => {
         if (res) {
-            // TODO: cancel timeout
+            // TODO1: cancel timeout
             dispatch({
                 type: "LIST",
                 payload: {
@@ -61,7 +69,7 @@ export const listCharacters = ( page = 1 , name = null, ids = null ) => dispatch
             })
         }
     })
-    // TODO: If timeout wasen't cancel dispatch error?
+    // TODO1: If timeout wasn't cancelled dispatch error?
 }
 
 export default function reducer(state = null, action) {

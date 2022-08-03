@@ -23,13 +23,11 @@ class ListView extends Component {
 
     componentDidUpdate() {
         // When component recieves a search query, stores in state and fetch character with query
-        const { query, idFilter } = this.state;
-        if (this.props.query !== query) this.setState({ query: this.props.query}, () => {
-            this.props.listCharacters(null, query, idFilter);
+        if (this.props.query !== this.state.query) this.setState({ query: this.props.query}, () => {
+            this.props.listCharacters(null, this.state.query, this.state.idFilter);
         });
-        debugger;
-        if (this.props.idFilter !== idFilter) this.setState( { idFilter: this.props.idFilter}, () => {
-            this.props.listCharacters(null, query, idFilter);
+        if (this.props.idFilter !== this.state.idFilter) this.setState( { idFilter: this.props.idFilter}, () => {
+            this.props.listCharacters(null, this.state.query, this.state.idFilter);
         })
     }
 

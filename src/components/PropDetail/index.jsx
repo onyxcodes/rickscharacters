@@ -19,7 +19,6 @@ class PropDetail extends Component {
     render() {
         const { propName, propType, value } = this.props;
         var prop, detailClasses = "propDetail";
-        console.log("Got propType", propType)
         switch(propType) {
             case "string":
             case "number":
