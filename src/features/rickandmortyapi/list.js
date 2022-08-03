@@ -1,8 +1,11 @@
 import axios from "axios";
 import {getPageFromURI} from "./index"
 
-const list = ( page ) => {
+const list = ( page, name ) => {
     return new Promise ( (resolve, reject) => {
+        let params = {}
+        if (name) params.name = name;
+        else params.page = page;
         axios({
             "method": "GET",
             "url": "https://rickandmortyapi.com/api/character",
@@ -10,9 +13,7 @@ const list = ( page ) => {
                 "crossorigin":true,
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Headers": "*"
-            }, "params": {
-                "page": page,
-            }
+            }, "params": params
         })
         .then(({data}) => {
             if (data && data?.results?.length) resolve(data)
@@ -23,7 +24,7 @@ const list = ( page ) => {
     });
 }
 
-export const listCharacters = ( page = 1) => dispatch => {
+export const listCharacters = ( page = 1 , name = null) => dispatch => {
     // The first dispatch is to mark that we are going to make an async call
     // when it responds, we are going to mark the call as completed
     dispatch({
@@ -32,9 +33,10 @@ export const listCharacters = ( page = 1) => dispatch => {
             loading: true
         }
     });
-    list(page).then( res => {
+    // TODO: start a timeout
+    list(page, name).then( res => {
         if (res) {
-            console.log("list - got res", res);
+            // TODO: cancel timeout
             dispatch({
                 type: "LIST",
                 payload: {
@@ -46,6 +48,7 @@ export const listCharacters = ( page = 1) => dispatch => {
             })
         }
     })
+    // TODO: If timeout wasen't cancel dispatch error?
 }
 
 export default function reducer(state = null, action) {

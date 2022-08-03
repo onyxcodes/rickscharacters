@@ -13,11 +13,22 @@ import ActionBar from "../../components/ActionBar";
 class ListView extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            searchQuery: null
+        }
     }
 
     componentDidMount() {
         // at first load data
         this.props.listCharacters();
+    }
+
+    componentDidUpdate() {
+        if (this.props.query !== this.state.searchQuery) this.setState({ searchQuery: this.props.query}, () => {
+            this.props.listCharacters(null, this.state.searchQuery);
+        });
+        // debugger;
+        // if ( this.props.query !== this.state.searchQuery && this.state.searchQuery ) 
     }
 
     fetchNext() {

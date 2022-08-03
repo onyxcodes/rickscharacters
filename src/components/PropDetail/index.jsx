@@ -2,6 +2,18 @@ import React, {Component} from "react";
 
 import { getEpisodeFromURI } from "../../features/rickandmortyapi";
 
+const renderEpisodeList = ( episodeList ) => {
+    let list = <ul className="propDetail-value-container">
+        {episodeList.map( (element, index) => {
+            let episode = getEpisodeFromURI(element);
+            return <li key={index} className="propDetail-value"><button title={"Episode ".concat(episode)}>
+                    {"📺 ".concat(episode)}
+            </button> </li>
+        })}
+    </ul>
+    return list;
+}
+
 class PropDetail extends Component {
     
     render() {
@@ -27,13 +39,7 @@ class PropDetail extends Component {
                 if ( !(value instanceof Array) ) throw new Error("PropDetail - For list prop types, value must be an array");
                 prop = <div className={detailClasses}>
                     <span className="title">{propName}</span>
-                    <ul className="propDetail-value-container">
-                        {value.map( (element, index) => {
-                            return <li key={index} className="propDetail-value">
-                                {"📺 ".concat(getEpisodeFromURI(element))}
-                            </li>
-                        })}
-                    </ul>
+                    {renderEpisodeList(value)}
                 </div>
                 break;
             default:

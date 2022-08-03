@@ -199,18 +199,21 @@ height: 400px;
 }
 
 .propDetail-value-container {
-  height: 72px;
   overflow-y: scroll;
   display: flex;
   width: 100%;
   list-style: none;
   gap: 10px;
   padding-left: 0;
+  white-space: nowrap;
+  margin: 0;
 }
 
-/* li.propDetail-value:nth-child(1) {
-  line-break: unset;
-} */
+.propDetail-value-container .propDetail-value {
+  padding: 10px 0;
+  /* display: flex; */
+  /* place-content: center; */
+}
 
 
 

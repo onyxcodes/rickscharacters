@@ -12,15 +12,11 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: false,
             showModal: false,
             focusedElement: null,
             favoritesMgt: new FavoritesMgt(),
+            searchQuery: null
         }
-    }
-
-    ctrlLoading(loadingState) {
-        this.setState({ isLoading: loadingState })
     }
 
     openDetails( element ) {
@@ -34,6 +30,11 @@ class App extends Component {
         this.setState({
             showModal: false
         })
+    }
+
+    setSearchQuery(name) {
+        console.log("App - got search query", name)
+        this.setState({ searchQuery: name})
     }
 
     addToFavorites(elementId) {
@@ -53,13 +54,14 @@ class App extends Component {
                     position="top"
                     bgColor="teal"
                     items={[
-                        { item: <SearchBar ctrlLoading={(loadingState) => this.ctrlLoading(loadingState)} />, position: "left" },
+                        { item: <SearchBar ctrlLoading={(loadingState) => this.ctrlLoading(loadingState)} setSearchQuery={(name)=> this.setSearchQuery(name)} />, position: "left" },
                         { item: <span>Rick's Characters</span>, position: "center" },
                         { item: <button>⭐ Favorites</button>, position: "right" }
                     ]} 
                 />
-                <Loader show={this.state.isLoading} />
-                <ListView 
+                {/* <Loader show={this.state.isLoading} /> */}
+                <ListView
+                    query={this.state.searchQuery}
                     paginated={false}
                     size="medium"
                     openDetails={(el) => this.openDetails(el)}
