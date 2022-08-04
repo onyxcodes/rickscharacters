@@ -14,8 +14,8 @@ class App extends Component {
         this.state = {
             showModal: false,
             focusedElement: null,
-            favoritesMgt: new FavoritesMgt(),
             searchQuery: null,
+            favoritesMgt: new FavoritesMgt(),
             favorites: null,
             favoritesVisible: false
         }

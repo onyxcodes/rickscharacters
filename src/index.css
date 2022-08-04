@@ -158,9 +158,7 @@ height: 400px;
 
 .modal-content .hero-container {
   flex: 0.25;
-  background-size: cover;
   width: 25%;
-  background-position: center;
   padding: 30px;
 }
 

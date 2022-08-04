@@ -24,8 +24,7 @@ class Modal extends Component {
         var modalClasses = size ? "modal".concat(" "+size) : "modal";
         var modalFgClasses  = visible ? "modal-fg".concat(" "+"visible") : "modal-fg";
         var details;
-        console.log("Got data", data)
-        if (data) details =Object.entries(data).map( ( [key, value], index) => {
+        if (data) details = Object.entries(data).map( ( [key, value], index) => {
             // TODO: consider moving distinction into propType
             if ( ["status", "species", "gender"].includes(key) ) {
                 return <PropDetail 
